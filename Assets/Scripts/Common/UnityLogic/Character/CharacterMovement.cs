@@ -1,5 +1,7 @@
 using Common.Infrastructure.Services.InputServices;
 using Common.Infrastructure.Services.MonoUpdate;
+using Common.Infrastructure.Services.StaticData;
+using Common.UnityLogic.Character.Zones;
 using UnityEngine;
 using Zenject;
 
@@ -13,13 +15,21 @@ namespace Common.UnityLogic.Character
         private IInputService _inputService;
         private MovementZone _movementZone;
 
+        private float _movementSpeed;
+        
         [Inject]
         private void Construct(IMonoUpdateService monoUpdateService, 
-            IInputService inputService, MovementZone movementZone)
+            IInputService inputService, IStaticDataService staticDataService,
+            MovementZone movementZone)
         {
             _monoUpdateService = monoUpdateService;
             _inputService = inputService;
             _movementZone = movementZone;
+        }
+
+        public void SetupMovementSpeed(in float movementSpeed)
+        {
+            _movementSpeed = movementSpeed;
         }
 
         private void OnValidate()
@@ -44,7 +54,7 @@ namespace Common.UnityLogic.Character
 
         private void Move()
         {
-            var delta = _inputService.Direction * Time.deltaTime;
+            var delta = _inputService.Direction * _movementSpeed * Time.deltaTime;
             _transform.position += _movementZone.ClampMovement(_transform.position, delta);
         }
     }

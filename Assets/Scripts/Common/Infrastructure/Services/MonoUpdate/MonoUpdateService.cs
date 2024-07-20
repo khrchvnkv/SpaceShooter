@@ -16,7 +16,7 @@ namespace Common.Infrastructure.Services.MonoUpdate
 
         private void FixedUpdate()
         {
-            OnUpdate?.Invoke();
+            OnFixedUpdate?.Invoke();
         }
 
         private void LateUpdate()

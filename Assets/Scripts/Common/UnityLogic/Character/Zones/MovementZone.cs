@@ -1,7 +1,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace Common.UnityLogic.Character
+namespace Common.UnityLogic.Character.Zones
 {
     public class MovementZone : MonoBehaviour
     {

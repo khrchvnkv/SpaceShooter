@@ -9,6 +9,6 @@ namespace Common.Infrastructure.Services.AssetsManagement
 
         public GameStaticData LoadGameStaticData() => Load<GameStaticData>(GAME_STATIC_DATA_PATH);
         public GameObject Load(in string path) => Load<GameObject>(path);
-        private T Load<T>(in string path) where T : Object => Resources.Load<T>(path);
+        public T Load<T>(in string path) where T : Object => Resources.Load<T>(path);
     }
 }

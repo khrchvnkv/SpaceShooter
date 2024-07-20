@@ -1,4 +1,7 @@
-using Common.Infrastructure.Factories.Characters;
+using Common.Infrastructure.Factories.GamePlay.Contracts;
+using Common.Infrastructure.Services.StaticData;
+using Common.StaticData;
+using Common.UnityLogic.Character.Data;
 using UnityEngine;
 using Zenject;
 
@@ -8,9 +11,11 @@ namespace Common.UnityLogic.Character
     {
         [SerializeField] private Transform _spawnPoint;
         
-        private ICharactersFactory _charactersFactory;
+        private IObjectFactory<CharacterConstructor> _charactersFactory;
+        private IStaticDataService _staticDataService;
 
-#if UNITY_EDITOR
+        private CharacterStaticData CharacterStaticData => _staticDataService.GameStaticData.CharacterStaticData;
+        
         private void OnValidate()
         {
             _spawnPoint ??= transform;
@@ -21,17 +26,24 @@ namespace Common.UnityLogic.Character
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(_spawnPoint.position, 0.3f);
         }
-#endif
 
         [Inject]
-        private void Construct(ICharactersFactory charactersFactory)
+        private void Construct(IObjectFactory<CharacterConstructor> charactersFactory,
+            IStaticDataService staticDataService)
         {
             _charactersFactory = charactersFactory;
+            _staticDataService = staticDataService;
         }
 
         public void Initialize()
         {
-            _charactersFactory.CreateCharacter(_spawnPoint);
+            var instance = _charactersFactory.Create(_spawnPoint);
+            instance.Initialize(CreatModel());
+        }
+
+        private CharacterModel CreatModel()
+        {
+            return new CharacterModel(CharacterStaticData);
         }
     }
 }

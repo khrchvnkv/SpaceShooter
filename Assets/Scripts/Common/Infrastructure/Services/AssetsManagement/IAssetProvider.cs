@@ -7,5 +7,6 @@ namespace Common.Infrastructure.Services.AssetsManagement
     {
         GameStaticData LoadGameStaticData();
         GameObject Load(in string path);
+        T Load<T>(in string path) where T : Object;
     }
 }

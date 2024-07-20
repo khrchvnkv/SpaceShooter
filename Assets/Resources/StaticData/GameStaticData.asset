@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49ec03c60149466aaea3ae94d5e365fa, type: 3}
   m_Name: GameStaticData
   m_EditorClassIdentifier: 
+  <LevelStaticData>k__BackingField: {fileID: 11400000, guid: d00a0000644f6416fa2ebf853b4e6d54, type: 2}
   <WindowStaticData>k__BackingField: {fileID: 11400000, guid: b8e492c30eec74b47bb2b1dd57bad5dd, type: 2}
+  <CharacterStaticData>k__BackingField: {fileID: 11400000, guid: c078f94d551a243a5b730e6f9c7df38c, type: 2}
+  <BulletStaticData>k__BackingField: {fileID: 11400000, guid: b699a80f69dd547ef8f8045df5388482, type: 2}
+  <EnemyStaticData>k__BackingField: {fileID: 11400000, guid: 85f041159f4fd4a9390a1ba75ad81ea2, type: 2}

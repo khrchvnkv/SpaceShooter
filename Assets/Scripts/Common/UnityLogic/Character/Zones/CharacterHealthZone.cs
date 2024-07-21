@@ -1,3 +1,4 @@
+using System;
 using Common.UnityLogic.GamePlay.Contracts;
 using UnityEngine;
 
@@ -7,11 +8,14 @@ namespace Common.UnityLogic.Character.Zones
     [RequireComponent(typeof(Collider2D))]
     public sealed class CharacterHealthZone : MonoBehaviour
     {
+        public event Action OnZoneEntered;
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.TryGetComponent(out IHealthZoneTriggerable healthZoneTriggerable))
             {
                 healthZoneTriggerable.OnHealthZoneEntered();
+                OnZoneEntered?.Invoke();
             }
         }
     }

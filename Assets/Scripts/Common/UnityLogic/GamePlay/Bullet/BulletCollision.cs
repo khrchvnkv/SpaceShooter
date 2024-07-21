@@ -1,3 +1,4 @@
+using System;
 using Common.Infrastructure.Factories.GamePlay.Contracts;
 using Common.UnityLogic.Enemy.Contracts;
 using Common.UnityLogic.GamePlay.Contracts;
@@ -12,12 +13,12 @@ namespace Common.UnityLogic.GamePlay.Bullet
     {
         [SerializeField] private BulletConstructor _bulletConstructor;
         
-        private IObjectFactory<BulletConstructor> _bulletFactory;
+        private MultiObjectFactory<BulletConstructor> _bulletFactory;
         
         private int _damage;
 
         [Inject]
-        private void Construct(IObjectFactory<BulletConstructor> bulletFactory)
+        private void Construct(MultiObjectFactory<BulletConstructor> bulletFactory)
         {
             _bulletFactory = bulletFactory;
         }
@@ -31,10 +32,10 @@ namespace Common.UnityLogic.GamePlay.Bullet
         {
             _damage = damage;
         }
-        
-        private void OnCollisionEnter2D(Collision2D other)
+
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.TryGetComponent(out IBulletColliding bulletColliding))
+            if (other.gameObject.TryGetComponent(out IBulletTriggerable bulletColliding))
             {
                 bulletColliding.CollideWithBullet(_damage);
                 DestroyBullet();

@@ -1,21 +1,21 @@
+using System;
 using Common.Infrastructure.Factories.GamePlay.Contracts;
 using Common.Infrastructure.Services.MonoUpdate;
+using Common.Infrastructure.Services.NearestEnemy;
 using Common.UnityLogic.Character.Data;
 using Common.UnityLogic.GamePlay.Bullet;
 using UnityEngine;
-using Zenject;
 
 namespace Common.UnityLogic.Character
 {
-    public sealed class CharacterShooting : MonoBehaviour
+    public sealed class CharacterShooting : IDisposable
     {
         private const float DelayBtwNearestSeek = 0.1f;
         
-        [SerializeField] private Transform _transform;
-        
-        private IMonoUpdateService _monoUpdateService;
-        private INearestEnemySeeker _nearestEnemySeeker;
-        private IObjectFactory<BulletConstructor> _bulletFactory;
+        private readonly Transform _transform;
+        private readonly IMonoUpdateService _monoUpdateService;
+        private readonly INearestEnemyFinder _nearestEnemyFinder;
+        private readonly MultiObjectFactory<BulletConstructor> _bulletFactory;
 
         private CharacterModel? _model;
 
@@ -24,36 +24,28 @@ namespace Common.UnityLogic.Character
 
         private bool IsTimerExpired => _shootRate <= 0.0f;
         
-        [Inject]
-        private void Construct(IMonoUpdateService monoUpdateService,
-            INearestEnemySeeker nearestEnemySeeker, IObjectFactory<BulletConstructor> bulletFactory)
+        public CharacterShooting(Transform transform, IMonoUpdateService monoUpdateService,
+            INearestEnemyFinder nearestEnemyFinder, 
+            MultiObjectFactory<BulletConstructor> bulletFactory)
         {
+            _transform = transform;
             _monoUpdateService = monoUpdateService;
-            _nearestEnemySeeker = nearestEnemySeeker;
+            _nearestEnemyFinder = nearestEnemyFinder;
             _bulletFactory = bulletFactory;
+            
+            _monoUpdateService.OnUpdate += OnUpdate;
         }
-
-        private void OnValidate()
+        
+        public void Dispose()
         {
-            _transform ??= transform;
+            _model = null;
+            _monoUpdateService.OnUpdate -= OnUpdate;
         }
 
         public void SetModel(CharacterModel model)
         {
             _model = model;
             ResetShootRate();
-        }
-
-        private void OnEnable()
-        {
-            _monoUpdateService.OnUpdate += OnUpdate;
-        }
-
-        private void OnDisable()
-        {
-            _model = null;
-            
-            _monoUpdateService.OnUpdate -= OnUpdate;
         }
 
         private void OnUpdate()
@@ -76,7 +68,7 @@ namespace Common.UnityLogic.Character
                     _nearestSeekDelay = null;
                 }
                 
-                var enemy = _nearestEnemySeeker.GetTheNearestEnemy(_transform.position, _model.Value.AttackRange);
+                var enemy = _nearestEnemyFinder.GetTheNearestEnemy(_transform.position, _model.Value.AttackRange);
                 if (enemy)
                 {
                     var direction = (enemy.Position - _transform.position).normalized;

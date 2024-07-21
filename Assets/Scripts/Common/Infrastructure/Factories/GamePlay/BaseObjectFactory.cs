@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Common.Infrastructure.Factories.GamePlay
 {
-    public abstract class ObjectFactory<T> : IObjectFactory<T> where T : MonoBehaviour
+    public abstract class BaseObjectFactory<T> : IObjectFactory<T> where T : MonoBehaviour
     {
         protected readonly IAssetProvider AssetProvider;
         protected readonly IZenjectFactory ZenjectFactory;
@@ -14,7 +14,7 @@ namespace Common.Infrastructure.Factories.GamePlay
 
         protected T Prefab;
 
-        protected ObjectFactory(IAssetProvider assetProvider, IZenjectFactory zenjectFactory)
+        protected BaseObjectFactory(IAssetProvider assetProvider, IZenjectFactory zenjectFactory)
         {
             AssetProvider = assetProvider;
             ZenjectFactory = zenjectFactory;
@@ -27,7 +27,22 @@ namespace Common.Infrastructure.Factories.GamePlay
         }
 
         protected abstract T CreateInstance(in Transform parent);
-
+        
         public abstract void Destroy(in T instance);
+        
+        public void Destroy(in GameObject instance)
+        {
+            if (instance.TryGetComponent(out T component))
+            {
+                Destroy(component);
+            }
+            else
+            {
+                Debug.LogError($"Trying to delete an object without a component {typeof(T)}, gameObject.name = {instance.name}");
+                instance.SetActive(false);
+            }
+        }
+
+        public abstract void ClearAll();
     }
 }

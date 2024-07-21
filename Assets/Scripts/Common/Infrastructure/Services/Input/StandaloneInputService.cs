@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Common.Infrastructure.Services.InputServices
+namespace Common.Infrastructure.Services.Input
 {
     public class StandaloneInputService : IInputService
     {
@@ -27,8 +27,8 @@ namespace Common.Infrastructure.Services.InputServices
                 return Vector2.zero;
             }
             
-            var horizontal = Input.GetAxis(HorizontalAxis);
-            var vertical = Input.GetAxis(VerticalAxis);
+            var horizontal = UnityEngine.Input.GetAxis(HorizontalAxis);
+            var vertical = UnityEngine.Input.GetAxis(VerticalAxis);
 
             return new Vector2(horizontal, vertical);
         }

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <StartHP>k__BackingField: 5
   <MovementSpeed>k__BackingField: 5
-  <AttackRange>k__BackingField: 6
-  <ShootRate>k__BackingField: 1.25
+  <AttackRange>k__BackingField: 5
+  <ShootRate>k__BackingField: 0.4

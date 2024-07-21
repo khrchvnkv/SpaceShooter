@@ -1,9 +1,9 @@
 using Common.UnityLogic.Enemy;
 using UnityEngine;
 
-namespace Common.Infrastructure.Factories.GamePlay.Contracts
+namespace Common.Infrastructure.Services.NearestEnemy
 {
-    public interface INearestEnemySeeker
+    public interface INearestEnemyFinder
     {
         EnemyConstructor GetTheNearestEnemy(in Vector3 fromPosition, in float maxDistance);
     }

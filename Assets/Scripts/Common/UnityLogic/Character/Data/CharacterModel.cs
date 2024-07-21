@@ -4,7 +4,7 @@ namespace Common.UnityLogic.Character.Data
 {
     public struct CharacterModel
     {
-        public readonly uint StartHp;
+        public readonly int StartHp;
         public readonly float MovementSpeed;
         public readonly float AttackRange;
         public readonly float ShootRate;

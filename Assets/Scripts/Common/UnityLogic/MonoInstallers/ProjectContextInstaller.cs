@@ -3,7 +3,7 @@ using Common.Infrastructure.Factories.Zenject;
 using Common.Infrastructure.Services.AssetsManagement;
 using Common.Infrastructure.Services.Coroutines;
 using Common.Infrastructure.Services.DontDestroyOnLoadCreator;
-using Common.Infrastructure.Services.InputServices;
+using Common.Infrastructure.Services.Input;
 using Common.Infrastructure.Services.MonoUpdate;
 using Common.Infrastructure.Services.SceneLoading;
 using Common.Infrastructure.Services.StaticData;

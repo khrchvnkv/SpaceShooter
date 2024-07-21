@@ -498,6 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterSpawner: {fileID: 527628645}
   _movementZone: {fileID: 527628644}
+  _healthZone: {fileID: 1944744208}
   _enemySpawner: {fileID: 416984504}
 --- !u!1 &773358507
 GameObject:

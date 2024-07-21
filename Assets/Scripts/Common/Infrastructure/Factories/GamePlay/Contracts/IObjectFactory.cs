@@ -6,5 +6,7 @@ namespace Common.Infrastructure.Factories.GamePlay.Contracts
     {
         T Create(in Transform parent);
         void Destroy(in T instance);
+        void Destroy(in GameObject instance);
+        void ClearAll();
     }
 }

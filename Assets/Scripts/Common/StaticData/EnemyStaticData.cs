@@ -1,4 +1,5 @@
 using Common.StaticData.Range;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Common.StaticData
@@ -6,7 +7,7 @@ namespace Common.StaticData
     [CreateAssetMenu(menuName = nameof(EnemyStaticData), fileName = nameof(EnemyStaticData), order = 2)]
     public sealed class EnemyStaticData : ScriptableObject
     {
-        [field: SerializeField] public uint StartHp { get; private set; }
+        [field: SerializeField, MinValue(1)] public int StartHp { get; private set; }
         [field: SerializeField] public MinMaxFloatRange SpeedRange { get; private set; }
         [field: SerializeField] public MinMaxFloatRange SpawnDelayRange { get; private set; }
 

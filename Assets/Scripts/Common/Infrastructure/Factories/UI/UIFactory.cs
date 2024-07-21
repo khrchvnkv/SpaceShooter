@@ -62,7 +62,7 @@ namespace Common.Infrastructure.Factories.UI
             if (_createdObjects.TryGetValue(data.WindowName, out var window))
             {
                 if (data.DestroyOnClosing) _createdObjects.Remove(data.WindowName);
-                window.GetComponent<IWindow>().Hide();
+                window?.GetComponent<IWindow>()?.Hide();
             }
         }
     }

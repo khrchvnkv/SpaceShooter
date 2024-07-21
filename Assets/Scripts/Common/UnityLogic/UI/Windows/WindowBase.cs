@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Common.UnityLogic.UI.Windows
 {
-    public abstract class WindowBase<TData> : MonoBehaviour, IWindow where TData : IWindowData
+    public abstract class WindowBase<TData> : MonoBehaviour, IWindow where TData : struct, IWindowData
     {
         protected TData WindowData;
 
@@ -15,6 +15,7 @@ namespace Common.UnityLogic.UI.Windows
         }
         public void Hide()
         {
+            PrepareForHiding();
             if (WindowData.DestroyOnClosing)
             {
                 Destroy(gameObject);
@@ -27,5 +28,6 @@ namespace Common.UnityLogic.UI.Windows
             WindowData = default;
         }
         protected virtual void PrepareForShowing() { }
+        protected virtual void PrepareForHiding() { }
     }
 }

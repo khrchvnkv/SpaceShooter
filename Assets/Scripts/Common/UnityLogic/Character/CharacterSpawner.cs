@@ -7,11 +7,11 @@ using Zenject;
 
 namespace Common.UnityLogic.Character
 {
-    public sealed class CharacterSpawner : MonoBehaviour, IInitializable
+    public sealed class CharacterSpawner : MonoBehaviour
     {
         [SerializeField] private Transform _spawnPoint;
         
-        private IObjectFactory<CharacterConstructor> _charactersFactory;
+        private SingleObjectFactory<CharacterConstructor> _characterFactory;
         private IStaticDataService _staticDataService;
 
         private CharacterStaticData CharacterStaticData => _staticDataService.GameStaticData.CharacterStaticData;
@@ -28,16 +28,16 @@ namespace Common.UnityLogic.Character
         }
 
         [Inject]
-        private void Construct(IObjectFactory<CharacterConstructor> charactersFactory,
+        private void Construct(SingleObjectFactory<CharacterConstructor> characterFactory,
             IStaticDataService staticDataService)
         {
-            _charactersFactory = charactersFactory;
+            _characterFactory = characterFactory;
             _staticDataService = staticDataService;
         }
 
         public void Initialize()
         {
-            var instance = _charactersFactory.Create(_spawnPoint);
+            var instance = _characterFactory.Create(_spawnPoint);
             instance.Initialize(CreatModel());
         }
 

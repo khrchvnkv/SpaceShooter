@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LevelStaticData
   m_EditorClassIdentifier: 
   <NumberOfEnemiesPerLevel>k__BackingField:
-    Min: 5
+    Min: 10
     Max: 20

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0757d9d7909f49aeaab91f27a756220d, type: 3}
   m_Name: EnemyStaticData
   m_EditorClassIdentifier: 
-  <StartHp>k__BackingField: 5
+  <StartHp>k__BackingField: 3
   <SpeedRange>k__BackingField:
     Min: 0.75
-    Max: 2.25
+    Max: 2.5
     _canBeNegative: 0
   <SpawnDelayRange>k__BackingField:
-    Min: 2.5
-    Max: 6
+    Min: 0.75
+    Max: 2
     _canBeNegative: 0

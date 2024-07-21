@@ -1,3 +1,4 @@
+using System;
 using Common.Infrastructure.Factories.GamePlay.Contracts;
 using Common.UnityLogic.Enemy.Contracts;
 using Common.UnityLogic.GamePlay.Contracts;
@@ -6,21 +7,16 @@ using Zenject;
 
 namespace Common.UnityLogic.Enemy
 {
-    public sealed class EnemyCollision : MonoBehaviour, IHealthZoneTriggerable, IBulletColliding
+    public sealed class EnemyCollision : MonoBehaviour, IHealthZoneTriggerable, IBulletTriggerable
     {
-        [SerializeField] private EnemyConstructor _enemyConstructor;
-        
-        private IObjectFactory<EnemyConstructor> _enemiesFactory;
+        private MultiObjectFactory<EnemyConstructor> _enemiesFactory;
+
+        public event Action<int> Damaged;
         
         [Inject]
-        private void Construct(IObjectFactory<EnemyConstructor> charactersFactory)
+        public void Construct(MultiObjectFactory<EnemyConstructor> enemiesFactory)
         {
-            _enemiesFactory = charactersFactory;
-        }
-
-        private void OnValidate()
-        {
-            _enemyConstructor = gameObject.GetComponent<EnemyConstructor>();
+            _enemiesFactory = enemiesFactory;
         }
 
         public void OnHealthZoneEntered()
@@ -28,14 +24,14 @@ namespace Common.UnityLogic.Enemy
             DestroyInstance();
         }
 
-        public void CollideWithBullet(in float damage)
+        public void CollideWithBullet(in int damage)
         {
-            DestroyInstance();
+            Damaged?.Invoke(damage);
         }
 
         private void DestroyInstance()
         {
-            _enemiesFactory.Destroy(_enemyConstructor);
+            _enemiesFactory.Destroy(gameObject);
         }
     }
 }

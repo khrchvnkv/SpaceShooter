@@ -1,50 +1,39 @@
-using Common.Infrastructure.Services.InputServices;
+using System;
+using Common.Infrastructure.Services.Input;
 using Common.Infrastructure.Services.MonoUpdate;
-using Common.Infrastructure.Services.StaticData;
 using Common.UnityLogic.Character.Zones;
 using UnityEngine;
-using Zenject;
 
 namespace Common.UnityLogic.Character
 {
-    public sealed class CharacterMovement : MonoBehaviour
+    public sealed class CharacterMovement : IDisposable
     {
-        [SerializeField] private Transform _transform;
-        
-        private IMonoUpdateService _monoUpdateService;
-        private IInputService _inputService;
-        private MovementZone _movementZone;
+        private readonly Transform _transform;
+        private readonly IMonoUpdateService _monoUpdateService;
+        private readonly IInputService _inputService;
+        private readonly MovementZone _movementZone;
 
         private float _movementSpeed;
         
-        [Inject]
-        private void Construct(IMonoUpdateService monoUpdateService, 
-            IInputService inputService, IStaticDataService staticDataService,
-            MovementZone movementZone)
+        public CharacterMovement(Transform transform, IMonoUpdateService monoUpdateService, 
+            IInputService inputService, MovementZone movementZone)
         {
+            _transform = transform;
             _monoUpdateService = monoUpdateService;
             _inputService = inputService;
             _movementZone = movementZone;
+            
+            _monoUpdateService.OnUpdate += OnUpdate;
+        }
+        
+        public void Dispose()
+        {
+            _monoUpdateService.OnUpdate -= OnUpdate;
         }
 
         public void SetupMovementSpeed(in float movementSpeed)
         {
             _movementSpeed = movementSpeed;
-        }
-
-        private void OnValidate()
-        {
-            _transform ??= transform;
-        }
-
-        private void OnEnable()
-        {
-            _monoUpdateService.OnUpdate += OnUpdate;
-        }
-
-        private void OnDisable()
-        {
-            _monoUpdateService.OnUpdate -= OnUpdate;
         }
 
         private void OnUpdate()

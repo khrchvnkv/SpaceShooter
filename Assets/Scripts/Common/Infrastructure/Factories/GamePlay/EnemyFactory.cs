@@ -4,16 +4,18 @@ using Common.Infrastructure.Factories.Zenject;
 using Common.Infrastructure.Services.AssetsManagement;
 using Common.UnityLogic.Enemy;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Common.Infrastructure.Factories.GamePlay
 {
-    public sealed class EnemyFactory : ObjectFactory<EnemyConstructor>, INearestEnemySeeker
+    public sealed class EnemyFactory : MultiObjectFactory<EnemyConstructor>
     {
         private const string EnemyPath = "Characters/Enemy";
 
         private readonly List<EnemyConstructor> _createdEnemies = new();
 
         protected override string Path => EnemyPath;
+        public override IEnumerable<EnemyConstructor> Collection => _createdEnemies;
 
         public EnemyFactory(IAssetProvider assetProvider, IZenjectFactory zenjectFactory) : base(assetProvider, zenjectFactory)
         { }
@@ -32,21 +34,9 @@ namespace Common.Infrastructure.Factories.GamePlay
             Object.Destroy(instance.gameObject);
         }
         
-        public EnemyConstructor GetTheNearestEnemy(in Vector3 fromPosition, in float maxDistance)
+        protected override void ClearCollection()
         {
-            EnemyConstructor enemy = null;
-            var minDistance = float.MaxValue;
-            foreach (var createdEnemy in _createdEnemies)
-            {
-                var distance = Vector3.Distance(fromPosition, createdEnemy.Position);
-                if (distance < minDistance && distance <= maxDistance)
-                {
-                    minDistance = distance;
-                    enemy = createdEnemy;
-                }
-            }
-
-            return enemy;
+            _createdEnemies.Clear();
         }
     }
 }

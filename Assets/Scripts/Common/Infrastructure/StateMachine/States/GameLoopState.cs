@@ -1,4 +1,4 @@
-using Common.Infrastructure.Services.InputServices;
+using Common.Infrastructure.Services.Input;
 
 namespace Common.Infrastructure.StateMachine.States
 {
@@ -12,9 +12,7 @@ namespace Common.Infrastructure.StateMachine.States
         }
 
         public void Enter()
-        {
-            _inputService.EnableInput();
-        }
+        { }
 
         public override void Exit()
         {

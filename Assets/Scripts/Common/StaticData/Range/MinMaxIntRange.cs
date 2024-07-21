@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 namespace Common.StaticData.Range
 {
     [Serializable]
-    public sealed class MinMaxUintRange : MinMaxRange<uint>
+    public sealed class MinMaxIntRange : MinMaxRange<int>
     {
         public override void OnValidate()
         {
@@ -14,9 +14,9 @@ namespace Common.StaticData.Range
             }
         }
 
-        public override uint GetRandom()
+        public override int GetRandom()
         {
-            return (uint)Random.Range(Min, Max + 1);
+            return Random.Range(Min, Max + 1);
         }
     }
 }

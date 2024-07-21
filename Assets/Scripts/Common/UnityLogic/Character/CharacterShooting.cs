@@ -3,6 +3,7 @@ using Common.Infrastructure.Factories.GamePlay.Contracts;
 using Common.Infrastructure.Services.MonoUpdate;
 using Common.Infrastructure.Services.NearestEnemy;
 using Common.UnityLogic.Character.Data;
+using Common.UnityLogic.Enemy;
 using Common.UnityLogic.GamePlay.Bullet;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Common.UnityLogic.Character
     public sealed class CharacterShooting : IDisposable
     {
         private const float DelayBtwNearestSeek = 0.1f;
+        private const float RotationSpeed = 75.0f;
         
         private readonly Transform _transform;
         private readonly IMonoUpdateService _monoUpdateService;
@@ -21,6 +23,8 @@ namespace Common.UnityLogic.Character
 
         private float _shootRate;
         private float? _nearestSeekDelay;
+
+        private EnemyConstructor _enemy;
 
         private bool IsTimerExpired => _shootRate <= 0.0f;
         
@@ -55,6 +59,7 @@ namespace Common.UnityLogic.Character
                 return;
             }
             
+            LookRotation();
             if (IsTimerExpired)
             {
                 if (_nearestSeekDelay.HasValue)
@@ -68,10 +73,10 @@ namespace Common.UnityLogic.Character
                     _nearestSeekDelay = null;
                 }
                 
-                var enemy = _nearestEnemyFinder.GetTheNearestEnemy(_transform.position, _model.Value.AttackRange);
-                if (enemy)
+                _enemy = _nearestEnemyFinder.GetTheNearestEnemy(_transform.position, _model.Value.AttackRange);
+                if (_enemy)
                 {
-                    var direction = (enemy.Position - _transform.position).normalized;
+                    var direction = (_enemy.Position - _transform.position).normalized;
                     Shoot(direction);
                     ResetShootRate();
                 }
@@ -84,6 +89,19 @@ namespace Common.UnityLogic.Character
             {
                 _shootRate -= Time.deltaTime;
             }
+        }
+
+        private void LookRotation()
+        {
+            if (!_enemy)
+            {
+                return;
+            }
+            
+            var look = _transform.InverseTransformPoint(_enemy.Position);
+            var angle = Mathf.Atan2(look.y, look.x) * Mathf.Rad2Deg - 90;
+            var newRotation = Quaternion.Euler(0, 0, angle);
+            _transform.rotation = Quaternion.Lerp(_transform.rotation, newRotation, RotationSpeed * Time.deltaTime);
         }
 
         private void ResetShootRate()
